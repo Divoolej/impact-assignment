@@ -6,5 +6,20 @@ import { getAuthors } from './authors';
 export const getVideos = async (): Promise<ProcessedVideo[]> => {
   const [categories, authors] = await Promise.all([getCategories(), getAuthors()]);
 
-  return []; // TODO: combine `categories` and `authors` into `videos` and use it to fill the table
+  const categoriesLookup: Record<number, string> = categories.reduce(
+    (lookup, category) => ({
+      ...lookup,
+      [category.id]: category.name,
+    }),
+    {}
+  );
+
+  return authors.flatMap((author) =>
+    author.videos.map((video) => ({
+      id: video.id,
+      name: video.name,
+      author: author.name,
+      categories: video.catIds.map((id) => categoriesLookup[id]),
+    }))
+  );
 };
