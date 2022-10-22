@@ -2,11 +2,15 @@ import type { ProcessedVideo } from '../interfaces';
 
 import styled from 'styled-components';
 
+import { Button } from './Button';
+
 type VideosTableProps = {
   videos: ProcessedVideo[];
+  onDelete: (video: ProcessedVideo) => void;
+  onEdit: (video: ProcessedVideo) => void;
 };
 
-export const VideosTable = ({ videos }: VideosTableProps) => (
+export const VideosTable = ({ videos, onDelete, onEdit }: VideosTableProps) => (
   <Wrapper>
     <Table>
       <thead>
@@ -22,12 +26,17 @@ export const VideosTable = ({ videos }: VideosTableProps) => (
         {videos.map((video) => (
           <tr key={video.id}>
             <td>{video.name}</td>
-            <td>{video.author}</td>
-            <td>{video.categories.join(', ')}</td>
+            <td>{video.author.name}</td>
+            <td>{video.categories.map(({ name }) => name).join(', ')}</td>
             <td>
-              {/* TODO: implement `edit` and `delete` actions */}
-              <button>Edit</button>
-              <button>Delete</button>
+              <Actions>
+                <Button small onClick={() => onEdit(video)}>
+                  Edit
+                </Button>
+                <Button small onClick={() => onDelete(video)}>
+                  Delete
+                </Button>
+              </Actions>
             </td>
           </tr>
         ))}
@@ -50,4 +59,9 @@ const Table = styled.table`
     border: 1px solid;
     text-align: left;
   }
+`;
+
+const Actions = styled.div`
+  display: flex;
+  gap: 8px;
 `;

@@ -1,15 +1,23 @@
 :root {
   --white: #fff;
   --light-gray: #f5f5f5;
+  --gray: #ccc;
   --dark-gray: #333;
-  --green: #00ab35;
+  --green: #1fbf4a;
+  --blue: #0042aa;
+  --red: #db504a;
 }
 
 body {
   margin: 0;
   color: var(--dark-gray);
-  font: 16px sans-serif;
+  font: 16px 'Inter', sans-serif;
   box-sizing: border-box;
+}
+
+input,
+button {
+  font-family: inherit;
 }
 
 *,

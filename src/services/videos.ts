@@ -1,15 +1,10 @@
-import type { ProcessedVideo } from '../interfaces';
+import type { ProcessedVideo, Author, Category } from '../interfaces';
 
-import { getCategories } from './categories';
-import { getAuthors } from './authors';
-
-export const getVideos = async (): Promise<ProcessedVideo[]> => {
-  const [categories, authors] = await Promise.all([getCategories(), getAuthors()]);
-
-  const categoriesLookup: Record<number, string> = categories.reduce(
+export const getVideos = (categories: Category[], authors: Author[]): ProcessedVideo[] => {
+  const categoriesLookup: Record<number, Category> = categories.reduce(
     (lookup, category) => ({
       ...lookup,
-      [category.id]: category.name,
+      [category.id]: category,
     }),
     {}
   );
@@ -18,8 +13,11 @@ export const getVideos = async (): Promise<ProcessedVideo[]> => {
     author.videos.map((video) => ({
       id: video.id,
       name: video.name,
-      author: author.name,
       categories: video.catIds.map((id) => categoriesLookup[id]),
+      author: {
+        id: author.id,
+        name: author.name,
+      },
     }))
   );
 };
